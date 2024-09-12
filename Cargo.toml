@@ -1,0 +1,16 @@
+[package]
+name = "constant-power-crossfader"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+authors = ["Zoe Oosting <zoe@kittycat.homes>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[workspace]
+members = ["xtask"]
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+parking_lot = "0.12.3"
