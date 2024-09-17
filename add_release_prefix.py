@@ -19,7 +19,7 @@ for filename in os.listdir(directory):
             os.rename(old_file, new_file)
             print(f"Renamed: {old_file} -> {new_file}")
             if os.path.isdir(new_file):
-                shutil.make_archive(f"{new_file}.zip", 'zip', new_file)
+                shutil.make_archive(f"{new_file}", 'zip', new_file)
                 os.rmdir(new_file)
             break
         except PermissionError:
