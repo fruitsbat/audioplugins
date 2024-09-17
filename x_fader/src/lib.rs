@@ -33,7 +33,7 @@ impl Default for ConstantPowerCrossfadeParams {
 
 impl Plugin for XFade {
     // metadata
-    const NAME: &'static str = "XFader";
+    const NAME: &'static str = "X Fader";
     const VENDOR: &'static str = "zoe bat";
     const URL: &'static str = "https://zoe.kittycat.homes";
     const EMAIL: &'static str = "zoe@kittycat.homes";

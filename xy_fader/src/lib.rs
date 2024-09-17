@@ -32,7 +32,7 @@ impl Default for ConstantPowerCrossfadeParams {
 
 impl Plugin for XYFade {
     // metadata
-    const NAME: &'static str = "XFader";
+    const NAME: &'static str = "XY Fader";
     const VENDOR: &'static str = "zoe bat";
     const URL: &'static str = "https://zoe.kittycat.homes";
     const EMAIL: &'static str = "zoe@kittycat.homes";
@@ -133,9 +133,9 @@ fn slider_high_audio_mix_value(mix_value: f32) -> f32 {
 }
 
 impl ClapPlugin for XYFade {
-    const CLAP_ID: &'static str = "fruitsuite.x_fader ";
+    const CLAP_ID: &'static str = "fruitsuite.xy_fader ";
     const CLAP_DESCRIPTION: Option<&'static str> =
-        Some("DJ style constant power crossfading plugin");
+        Some("Two dimensional crossfading!");
     const CLAP_MANUAL_URL: Option<&'static str> = None;
     const CLAP_SUPPORT_URL: Option<&'static str> = Some("https://zoe.kittycat.homes");
     const CLAP_FEATURES: &'static [ClapFeature] = &[
@@ -147,7 +147,7 @@ impl ClapPlugin for XYFade {
 }
 
 impl Vst3Plugin for XYFade {
-    const VST3_CLASS_ID: [u8; 16] = *b"fruit.XFader0000";
+    const VST3_CLASS_ID: [u8; 16] = *b"fruit.XYFader000";
     const VST3_SUBCATEGORIES: &'static [Vst3SubCategory] = &[
         Vst3SubCategory::Fx,
         Vst3SubCategory::Stereo,
