@@ -2,7 +2,7 @@ import os
 import sys
 
 directory = os.path.join("target", "bundled")
-prefix = sys.argv[0]
+prefix = sys.argv[1]
 
 for filename in os.listdir(directory):
     old_file = os.path.join(directory)
