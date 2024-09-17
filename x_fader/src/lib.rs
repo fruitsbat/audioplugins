@@ -99,7 +99,7 @@ fn get_sidechain_value_for_main_sample(
     sample_index: usize,
     aux: &mut AuxiliaryBuffers,
 ) -> f32 {
-    if let Some(buffer) = aux.inputs.get(0) {
+    if let Some(buffer) = aux.inputs.first() {
         let buffer = buffer.as_slice_immutable();
         if let Some(sample) = buffer.get(channel_index) {
             if let Some(channel) = sample.get(sample_index) {
