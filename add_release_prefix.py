@@ -1,10 +1,11 @@
 import os
 import time
 import sys
+import shutil
 
 directory = os.path.join("target", "bundled")
 prefix = sys.argv[1]  # assuming prefix is passed as the first argument
-max_retries = 5  # Number of retries for a locked file
+max_retries = 100  # Number of retries for a locked file
 delay = 2  # Delay in seconds between retries
 
 # Iterate over files in the directory
@@ -17,6 +18,9 @@ for filename in os.listdir(directory):
         try:
             os.rename(old_file, new_file)
             print(f"Renamed: {old_file} -> {new_file}")
+            if os.path.isdir(new_file):
+                shutil.make_archive(f"{new_file}.zip", 'zip', new_file)
+                os.rmdir(new_file)
             break
         except PermissionError:
             print(f"PermissionError: File '{old_file}' is being used. Retrying in {delay} seconds...")
