@@ -17,6 +17,6 @@ jobs:
         run: python3 rename_release_files_windows.py
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "target\\bundled\\*"
+          artifacts: ".\target\bundled\*"
           allowUpdates: true
           tag: "release"
