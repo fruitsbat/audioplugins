@@ -1,7 +1,7 @@
 import os
 
 # Define the directory where the files are located and the prefix to add
-directory = '\target\\bundled'  # Update with your directory
+directory = '\target\bundled'  # Update with your directory
 prefix = 'windows_'  # The prefix you want to add
 
 # Loop through all files in the directory
