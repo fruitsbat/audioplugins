@@ -13,6 +13,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: build binary
         run: cargo xtask bundle -p x_fader
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "target/bundled*"
+          allowUpdates: true
       - name: upload artifact
         uses: actions/upload-artifact@v3
         with:
