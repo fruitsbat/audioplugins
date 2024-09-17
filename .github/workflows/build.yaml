@@ -11,12 +11,46 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: Swatinem/rust-cache@v2
-      - name: build binary
-        run: cargo xtask bundle -p x_fader
+      - name: Build Binaries
+        run: python3 build_all.py
       - name: add release prefix
         run: python3 add_release_prefix.py windows_
       - uses: ncipollo/release-action@v1
         with:
           artifacts: '.\target\bundled\*'
+          allowUpdates: true
+          tag: "release"
+
+jobs:
+  build-linux:
+    name: Build on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+      - name: Build Binaries
+        run: python3 build_all.py
+      - name: add release prefix
+        run: python3 add_release_prefix.py linux_
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: './target/bundled/*'
+          allowUpdates: true
+          tag: "release"
+
+jobs:
+  build-linux:
+    name: Build on MacOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+      - name: Build Binaries
+        run: python3 build_all.py
+      - name: add release prefix
+        run: python3 add_release_prefix.py macos_
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: './target/bundled/*'
           allowUpdates: true
           tag: "release"
