@@ -7,5 +7,6 @@ subprocess.run(
         "bundle",
         "-p",
         "x_fader",
+        "xy_fader",
     ]
 )
