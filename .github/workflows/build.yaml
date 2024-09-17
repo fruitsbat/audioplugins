@@ -17,6 +17,7 @@ jobs:
         run: python3 add_release_prefix.py windows_
       - uses: ncipollo/release-action@v1
         with:
+          bodyFile: release.md
           artifacts: '.\target\bundled\*'
           allowUpdates: true
           tag: "release"
@@ -33,6 +34,7 @@ jobs:
         run: python3 add_release_prefix.py linux_
       - uses: ncipollo/release-action@v1
         with:
+          bodyFile: release.md
           artifacts: './target/bundled/*'
           allowUpdates: true
           tag: "release"
@@ -49,6 +51,7 @@ jobs:
         run: python3 add_release_prefix.py macos_
       - uses: ncipollo/release-action@v1
         with:
+          bodyFile: release.md
           artifacts: './target/bundled/*'
           allowUpdates: true
           tag: "release"
