@@ -968,3 +968,11 @@ dependencies = [
  "nih_plug",
  "parking_lot",
 ]
+
+[[package]]
+name = "xyz_fader"
+version = "0.1.0"
+dependencies = [
+ "nih_plug",
+ "parking_lot",
+]

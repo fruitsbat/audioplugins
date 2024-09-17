@@ -24,8 +24,8 @@ struct ConstantPowerCrossfadeParams {
 impl Default for ConstantPowerCrossfadeParams {
     fn default() -> Self {
         Self {
-            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
-            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
+            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }).with_smoother(SmoothingStyle::Linear(10.0)),
+            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }).with_smoother(SmoothingStyle::Linear(10.0)),
         }
     }
 }

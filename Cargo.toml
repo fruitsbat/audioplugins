@@ -9,7 +9,7 @@ authors = ["Zoe Oosting <zoe@kittycat.homes>"]
 crate-type = ["cdylib"]
 
 [workspace]
-members = [ "x_fader","xtask", "xy_fader"]
+members = [ "x_fader","xtask", "xy_fader", "xyz_fader"]
 
 [dependencies]
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }
