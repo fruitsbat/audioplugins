@@ -129,14 +129,6 @@ version = "0.3.0"
 source = "git+https://github.com/robbert-vdh/clap-sys.git?branch=feature/cstr-macro#523a5f8a8dd021ec99e7d6e0c0ebe7741a3da9d4"
 
 [[package]]
-name = "constant-power-crossfader"
-version = "0.1.0"
-dependencies = [
- "nih_plug",
- "parking_lot",
-]
-
-[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -222,6 +214,14 @@ name = "equivalent"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
+
+[[package]]
+name = "fruitsuite"
+version = "0.1.0"
+dependencies = [
+ "nih_plug",
+ "parking_lot",
+]
 
 [[package]]
 name = "gimli"
@@ -944,6 +944,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f593a95398737aeed53e489c785df13f3618e41dbcd6718c6addbf1395aa6876"
 dependencies = [
  "memchr",
+]
+
+[[package]]
+name = "x_fader"
+version = "0.1.0"
+dependencies = [
+ "nih_plug",
+ "parking_lot",
 ]
 
 [[package]]

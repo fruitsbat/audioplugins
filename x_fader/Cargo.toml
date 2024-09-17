@@ -1,15 +1,12 @@
 [package]
-name = "fruitsuite"
+name = "x_fader"
 version = "0.1.0"
 edition = "2021"
-license = "GPL-3.0-or-later"
-authors = ["Zoe Oosting <zoe@kittycat.homes>"]
 
 [lib]
 crate-type = ["cdylib"]
 
-[workspace]
-members = [ "x_fader","xtask"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }
