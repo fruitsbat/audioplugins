@@ -17,10 +17,4 @@ jobs:
         with:
           artifacts: "target/bundled*"
           allowUpdates: true
-      - name: upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: windows_x86
-          path: | 
-            target\bundled\x_fader.vst3
-            target\bundled\x_fader.clap
+          tag: "release"
