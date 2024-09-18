@@ -15,7 +15,7 @@ impl Default for XFade {
 
 #[derive(Params)]
 struct ConstantPowerCrossfadeParams {
-    #[id = "Main/Sidechain Mix"]
+    #[id = "xcrtl"]
     pub main_side_mix: FloatParam,
 }
 
@@ -23,7 +23,7 @@ impl Default for ConstantPowerCrossfadeParams {
     fn default() -> Self {
         Self {
             main_side_mix: FloatParam::new(
-                "Main/Sidechain Mix",
+                "X Mix",
                 0.5,
                 FloatRange::Linear { min: 0.0, max: 1.0 },
             )
@@ -41,7 +41,7 @@ impl Plugin for XFade {
     const VERSION: &'static str = env!("CARGO_PKG_VERSION");
     const MIDI_INPUT: MidiConfig = MidiConfig::None;
     const MIDI_OUTPUT: MidiConfig = MidiConfig::None;
-    const SAMPLE_ACCURATE_AUTOMATION: bool = true;
+    const SAMPLE_ACCURATE_AUTOMATION: bool = false ;
 
     const AUDIO_IO_LAYOUTS: &'static [AudioIOLayout] = &[
         // stereo
