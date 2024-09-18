@@ -10,7 +10,7 @@ subprocess.run(
         "-p",
         "xy_fader",
         "-p",
-        "xyz_fader"
+        "xyz_fader",
         "--release"
     ]
 )
