@@ -1,4 +1,4 @@
-This is the latest release of fruitsuite!
+This is the latest release of my plugins!
 For more information about the specific plugins check my [blog](https://zoe.kittycat.homes).
 
 # Installing
