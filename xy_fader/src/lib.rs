@@ -24,8 +24,8 @@ struct ConstantPowerCrossfadeParams {
 impl Default for ConstantPowerCrossfadeParams {
     fn default() -> Self {
         Self {
-            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }).with_smoother(SmoothingStyle::Linear(10.0)),
-            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }).with_smoother(SmoothingStyle::Linear(10.0)),
+            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
+            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
         }
     }
 }
@@ -47,14 +47,23 @@ impl Plugin for XYFade {
             main_input_channels: NonZeroU32::new(2),
             main_output_channels: NonZeroU32::new(2),
 
-            aux_input_ports: &[new_nonzero_u32(2), new_nonzero_u32(2), new_nonzero_u32(2)],
+            aux_input_ports: &[
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+                new_nonzero_u32(2),
+            ],
             aux_output_ports: &[],
 
             names: PortNames {
                 layout: Some("Stereo"),
-                main_input: Some("[0, 0]"),
+                main_input: Some("[0, 0, 0]"),
                 main_output: Some("Out"),
-                aux_inputs: &["[1, 0]", "[0, 1]", "[1, 1]"],
+                aux_inputs: &["[1, 0, 0]", "[0, 1, 0]", "[1, 1, 0]"],
                 aux_outputs: &[],
             },
         },
@@ -134,8 +143,7 @@ fn slider_high_audio_mix_value(mix_value: f32) -> f32 {
 
 impl ClapPlugin for XYFade {
     const CLAP_ID: &'static str = "fruitsuite.xy_fader ";
-    const CLAP_DESCRIPTION: Option<&'static str> =
-        Some("Two dimensional crossfading!");
+    const CLAP_DESCRIPTION: Option<&'static str> = Some("Two dimensional crossfading!");
     const CLAP_MANUAL_URL: Option<&'static str> = None;
     const CLAP_SUPPORT_URL: Option<&'static str> = Some("https://zoe.kittycat.homes");
     const CLAP_FEATURES: &'static [ClapFeature] = &[

@@ -1,11 +1,11 @@
 use nih_plug::prelude::*;
 use std::sync::Arc;
 
-struct XYFade {
+struct XYZFade {
     params: Arc<ConstantPowerCrossfadeParams>,
 }
 
-impl Default for XYFade {
+impl Default for XYZFade {
     fn default() -> Self {
         Self {
             params: Arc::new(ConstantPowerCrossfadeParams::default()),
@@ -19,20 +19,26 @@ struct ConstantPowerCrossfadeParams {
     pub x_slider: FloatParam,
     #[id = "Y"]
     pub y_slider: FloatParam,
+    #[id = "Z"]
+    pub z_slider: FloatParam,
 }
 
 impl Default for ConstantPowerCrossfadeParams {
     fn default() -> Self {
         Self {
-            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
-            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 }),
+            x_slider: FloatParam::new("X", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 })
+                .with_smoother(SmoothingStyle::Linear(10.0)),
+            y_slider: FloatParam::new("Y", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 })
+                .with_smoother(SmoothingStyle::Linear(10.0)),
+            z_slider: FloatParam::new("Z", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 })
+                .with_smoother(SmoothingStyle::Linear(10.0)),
         }
     }
 }
 
-impl Plugin for XYFade {
+impl Plugin for XYZFade {
     // metadata
-    const NAME: &'static str = "XY Fader";
+    const NAME: &'static str = "XYZ Fader";
     const VENDOR: &'static str = "zoe bat";
     const URL: &'static str = "https://zoe.kittycat.homes";
     const EMAIL: &'static str = "zoe@kittycat.homes";
@@ -55,7 +61,6 @@ impl Plugin for XYFade {
                 new_nonzero_u32(2),
                 new_nonzero_u32(2),
                 new_nonzero_u32(2),
-                new_nonzero_u32(2),
             ],
             aux_output_ports: &[],
 
@@ -63,7 +68,15 @@ impl Plugin for XYFade {
                 layout: Some("Stereo"),
                 main_input: Some("[0, 0, 0]"),
                 main_output: Some("Out"),
-                aux_inputs: &["[1, 0, 0]", "[0, 1, 0]", "[1, 1, 0]"],
+                aux_inputs: &[
+                    "[1, 0, 0]",
+                    "[0, 0, 1]",
+                    "[1, 0, 1]",
+                    "[0, 1, 0]",
+                    "[1, 1, 0]",
+                    "[0, 1, 1]",
+                    "[1, 1, 1]",
+                ],
                 aux_outputs: &[],
             },
         },
@@ -91,21 +104,40 @@ impl Plugin for XYFade {
         let y_low_volume = slider_low_audio_mix_value(y_mix_value);
         let y_high_volume = slider_high_audio_mix_value(y_mix_value);
 
+        let z_mix_value = self.params.z_slider.smoothed.next();
+        let z_low_volume = slider_low_audio_mix_value(z_mix_value);
+        let z_high_value = slider_high_audio_mix_value(z_mix_value);
+
         // apply to main audio input
         for (sample_index, channel_samples) in buffer.iter_samples().enumerate() {
             for (channel_index, sample) in channel_samples.into_iter().enumerate() {
-                let sample_0_0 = *sample;
-                let sample_1_0 =
-                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 1);
-                let sample_0_1 =
+                let sample_0_0_0 = *sample;
+                let sample_1_0_0 =
                     get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 0);
-                let sample_1_1 =
+                let mix_x_1 = (sample_0_0_0 * x_low_volume) + (sample_1_0_0 * x_high_volume);
+
+                let sample_0_0_1 =
+                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 1);
+                let sample_1_0_1 =
                     get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 2);
+                let mix_x_2 = (sample_0_0_1 * x_low_volume) + (sample_1_0_1 * x_high_volume);
 
-                let low_y = (sample_0_0 * x_low_volume) + (sample_1_0 * x_high_volume);
-                let high_y = (sample_0_1 * x_low_volume) + (sample_1_1 * x_high_volume);
+                let sample_0_1_0 =
+                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 3);
+                let sample_1_1_0 =
+                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 4);
+                let mix_x_3 = (sample_0_1_0 * x_low_volume) + (sample_1_1_0 * x_high_volume);
 
-                *sample = (low_y * y_low_volume) + (high_y * y_high_volume);
+                let sample_0_1_1 =
+                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 5);
+                let sample_1_1_1 =
+                    get_sidechain_value_for_main_sample(channel_index, sample_index, aux, 6);
+                let mix_x_4 = (sample_0_1_1 * x_low_volume) + (sample_1_1_1 * x_high_volume);
+
+                let mix_y_1 = (mix_x_1 * y_low_volume) + (mix_x_2 * y_high_volume);
+                let mix_y_2 = (mix_x_3 * y_low_volume) + (mix_x_4 * y_high_volume);
+
+                *sample = (mix_y_1 * z_low_volume) + (mix_y_2 * z_high_value);
             }
         }
 
@@ -141,8 +173,8 @@ fn slider_high_audio_mix_value(mix_value: f32) -> f32 {
     f32::sqrt(1.0 - mix_value)
 }
 
-impl ClapPlugin for XYFade {
-    const CLAP_ID: &'static str = "fruitsuite.xy_fader ";
+impl ClapPlugin for XYZFade {
+    const CLAP_ID: &'static str = "fruitsbat.xyz_fader ";
     const CLAP_DESCRIPTION: Option<&'static str> = Some("Two dimensional crossfading!");
     const CLAP_MANUAL_URL: Option<&'static str> = None;
     const CLAP_SUPPORT_URL: Option<&'static str> = Some("https://zoe.kittycat.homes");
@@ -154,8 +186,8 @@ impl ClapPlugin for XYFade {
     ];
 }
 
-impl Vst3Plugin for XYFade {
-    const VST3_CLASS_ID: [u8; 16] = *b"fruit.XYFader000";
+impl Vst3Plugin for XYZFade {
+    const VST3_CLASS_ID: [u8; 16] = *b"fruit.XYZFader00";
     const VST3_SUBCATEGORIES: &'static [Vst3SubCategory] = &[
         Vst3SubCategory::Fx,
         Vst3SubCategory::Stereo,
@@ -163,5 +195,5 @@ impl Vst3Plugin for XYFade {
     ];
 }
 
-nih_export_clap!(XYFade);
-nih_export_vst3!(XYFade);
+nih_export_clap!(XYZFade);
+nih_export_vst3!(XYZFade);
