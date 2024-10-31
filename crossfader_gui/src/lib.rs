@@ -3,7 +3,7 @@ use nih_plug::{
     plugin::Plugin,
     prelude::*,
 };
-use nih_plug_iced::IcedState;
+use nih_plug_vizia::ViziaState;
 use std::sync::Arc;
 mod editor;
 use audio_util::{self, buffer::get_sample_at_position, crossfade};
@@ -23,7 +23,7 @@ impl Default for XFader {
 #[derive(Params)]
 pub struct XFaderParams {
     #[persist = "editor-state"]
-    editor_state: Arc<IcedState>,
+    editor_state: Arc<ViziaState>,
 
     #[id = "53c56370-01c5-4820-a977-1dec2eef1af3"]
     pub fade_strength: FloatParam,
@@ -38,7 +38,9 @@ impl Default for XFaderParams {
                 0.5,
                 FloatRange::Linear { min: 0.0, max: 1.0 },
             )
-            .with_smoother(SmoothingStyle::Linear(5.0)),
+            .with_smoother(SmoothingStyle::Linear(0.5))
+            .with_unit(" %")
+            .with_value_to_string(formatters::v2s_f32_percentage(2)),
         }
     }
 }

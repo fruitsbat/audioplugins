@@ -1,99 +1,45 @@
+use nih_plug::prelude::Editor;
+use nih_plug_vizia::vizia::prelude::*;
+use nih_plug_vizia::widgets::*;
+use nih_plug_vizia::{assets, create_vizia_editor, ViziaState, ViziaTheming};
 use std::sync::Arc;
-
-use nih_plug::{editor::Editor, prelude::GuiContext};
-use nih_plug_iced::widgets as nih_widgets;
-use nih_plug_iced::*;
-use style::{self};
 
 use crate::XFaderParams;
 
-pub(crate) fn default_state() -> Arc<IcedState> {
-    return IcedState::from_size(180, 150);
+#[derive(Lens)]
+struct Data {
+    params: Arc<XFaderParams>,
+}
+
+impl Model for Data {}
+
+pub(crate) fn default_state() -> Arc<ViziaState> {
+    return ViziaState::new(|| (200, 150));
 }
 
 pub(crate) fn create(
     params: Arc<XFaderParams>,
-    editor_state: Arc<IcedState>,
+    editor_state: Arc<ViziaState>,
 ) -> Option<Box<dyn Editor>> {
-    create_iced_editor::<XFaderEditor>(editor_state, params)
-}
+    create_vizia_editor(editor_state, ViziaTheming::Custom, move |cx, _| {
+        assets::register_noto_sans_light(cx);
+        assets::register_noto_sans_thin(cx);
 
-struct XFaderEditor {
-    params: Arc<XFaderParams>,
-    context: Arc<dyn GuiContext>,
-    // params
-    fade_strength_state: nih_widgets::param_slider::State,
-}
-
-#[derive(Debug, Clone, Copy)]
-enum Message {
-    ParamUpdate(nih_widgets::ParamMessage),
-}
-
-impl IcedEditor for XFaderEditor {
-    type Executor = executor::Default;
-    type Message = Message;
-    type InitializationFlags = Arc<XFaderParams>;
-
-    fn new(
-        params: Self::InitializationFlags,
-        context: Arc<dyn GuiContext>,
-    ) -> (Self, Command<Self::Message>) {
-        let editor = Self {
-            params,
-            context,
-            fade_strength_state: Default::default(),
-        };
-        (editor, Command::none())
-    }
-
-    fn context(&self) -> &dyn GuiContext {
-        self.context.as_ref()
-    }
-
-    fn update(
-        &mut self,
-        _window: &mut WindowQueue,
-        message: Self::Message,
-    ) -> Command<Self::Message> {
-        match message {
-            Message::ParamUpdate(message) => self.handle_param_message(message),
+        Data {
+            params: params.clone(),
         }
+        .build(cx);
 
-        return Command::none();
-    }
+        VStack::new(cx, |cx| {
+            Label::new(cx, "X¹Fader")
+                .font_family(vec![FamilyOwned::Name(String::from(assets::NOTO_SANS))])
+                .font_size(style::font::size::XL);
 
-    fn view(&mut self) -> Element<'_, Self::Message> {
-        Column::new()
-            .align_items(Alignment::Center)
-            .spacing(style::spacing::MD)
-            .push(
-                Text::new("X¹Fader")
-                    .font(style::font::FIRA_BOLD)
-                    .size(style::font::size::XL)
-                    .color(style::color::BASE_CONTENT)
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .vertical_alignment(alignment::Vertical::Center),
-            )
-            .push(Space::with_height(style::spacing::MD.into()))
-            .push(
-                Text::new("Fade Strength")
-                    .font(style::font::FIRA_REGULAR)
-                    .size(style::font::size::MD)
-                    .color(style::color::BASE_CONTENT),
-            )
-            .push(
-                nih_widgets::ParamSlider::new(
-                    &mut self.fade_strength_state,
-                    &self.params.fade_strength,
-                )
-                .font(style::font::FIRA_REGULAR)
-                .map(Message::ParamUpdate),
-            )
-            .into()
-    }
-
-    fn background_color(&self) -> Color {
-        return style::color::BASE;
-    }
+            Label::new(cx, "Fade Strength");
+            ParamSlider::new(cx, Data::params, |params| &params.fade_strength);
+        })
+        .row_between(Pixels(0.0))
+        .child_left(Stretch(1.0))
+        .child_right(Stretch(1.0));
+    })
 }

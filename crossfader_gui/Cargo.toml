@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }
-nih_plug_iced = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+nih_plug_vizia = { git = "https://github.com/robbert-vdh/nih-plug.git" }
 style = { path = "../style" }
 audio_util = { path = "../audio_util" }
 parking_lot = "0.12.3"
