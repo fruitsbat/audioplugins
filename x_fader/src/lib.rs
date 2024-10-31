@@ -15,19 +15,16 @@ impl Default for XFade {
 
 #[derive(Params)]
 struct ConstantPowerCrossfadeParams {
-    #[id = "xcrtl"]
+    #[id = "8eef0a45-7715-4714-845c-1d2dd0bf7c52"]
     pub main_side_mix: FloatParam,
 }
 
 impl Default for ConstantPowerCrossfadeParams {
     fn default() -> Self {
         Self {
-            main_side_mix: FloatParam::new(
-                "X Mix",
-                0.5,
-                FloatRange::Linear { min: 0.0, max: 1.0 },
-            )
-            .with_smoother(SmoothingStyle::Linear(10.0)),
+            main_side_mix: FloatParam::new("X Mix", 0.5, FloatRange::Linear { min: 0.0, max: 1.0 })
+                .with_smoother(SmoothingStyle::Linear(10.0))
+                .with_step_size(0.0001),
         }
     }
 }
@@ -41,7 +38,7 @@ impl Plugin for XFade {
     const VERSION: &'static str = env!("CARGO_PKG_VERSION");
     const MIDI_INPUT: MidiConfig = MidiConfig::None;
     const MIDI_OUTPUT: MidiConfig = MidiConfig::None;
-    const SAMPLE_ACCURATE_AUTOMATION: bool = false ;
+    const SAMPLE_ACCURATE_AUTOMATION: bool = true;
 
     const AUDIO_IO_LAYOUTS: &'static [AudioIOLayout] = &[
         // stereo
@@ -135,7 +132,7 @@ impl ClapPlugin for XFade {
 }
 
 impl Vst3Plugin for XFade {
-    const VST3_CLASS_ID: [u8; 16] = *b"fruit.XFader0000";
+    const VST3_CLASS_ID: [u8; 16] = *b"Vx2f3D7k!a@cJS8H";
     const VST3_SUBCATEGORIES: &'static [Vst3SubCategory] = &[
         Vst3SubCategory::Fx,
         Vst3SubCategory::Stereo,

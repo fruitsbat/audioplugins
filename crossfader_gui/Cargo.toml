@@ -1,0 +1,17 @@
+[package]
+name = "crossfader_gui"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+nih_plug_iced = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+style = { path = "../style" }
+audio_util = { path = "../audio_util" }
+parking_lot = "0.12.3"
+atomic_float = { version = "1", features = ["serde"] }

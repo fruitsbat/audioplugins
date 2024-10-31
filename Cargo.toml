@@ -9,7 +9,7 @@ authors = ["Zoe Oosting <zoe@kittycat.homes>"]
 crate-type = ["cdylib"]
 
 [workspace]
-members = [ "x_fader","xtask", "xy_fader", "xyz_fader"]
+members = [ "style","crossfader_gui", "x_fader","xtask", "xy_fader", "xyz_fader", "audio_util"]
 
 [dependencies]
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }

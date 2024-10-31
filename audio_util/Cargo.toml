@@ -1,0 +1,11 @@
+[package]
+name = "audio_util"
+version = "0.1.0"
+edition = "2021"
+
+[crate]
+type = "cdylib"
+
+[dependencies]
+float-cmp = "0.10.0"
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git" }

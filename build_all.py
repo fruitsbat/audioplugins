@@ -11,6 +11,8 @@ subprocess.run(
         "xy_fader",
         "-p",
         "xyz_fader",
+        "-p",
+        "crossfader_gui",
         "--release"
     ]
 )
